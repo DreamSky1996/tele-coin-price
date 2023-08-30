@@ -1,3 +1,4 @@
+from flask import Flask
 from binance import Client
 from telegram.ext import Updater, CallbackContext, CommandHandler, MessageHandler, Filters
 from telegram import Update
@@ -5,7 +6,11 @@ from dotenv import load_dotenv
 import re
 import os
 
+app = Flask(__name__)
 load_dotenv()
+@app.route('/')
+def home():
+    return 'Hello, World!'
 
 TELEGRAM_BOT_TOKEN = GCP_PROJECT_ID = os.getenv('TELEGRAM_BOT_TOKEN')
 updater = Updater(TELEGRAM_BOT_TOKEN, use_context=True)
@@ -32,10 +37,10 @@ def coin_price(update: Update, context: CallbackContext):
 	price = get_price(symbol)
 	update.message.reply_text(price)
 
-def main()
-    updater.dispatcher.add_handler(CommandHandler('start', start))
-    updater.dispatcher.add_handler(MessageHandler(Filters.text, coin_price))
-    updater.start_polling()
-    updater.idle()
+updater.dispatcher.add_handler(CommandHandler('start', start))
+updater.dispatcher.add_handler(MessageHandler(Filters.text, coin_price))
+updater.start_polling()
+# updater.idle()
 
-main()
+if __name__ == '__main__':
+    app.run(threaded=True)
