@@ -16,18 +16,30 @@ TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
+client = Client()
+client.API_URL = 'https://api.binance.com/api'
 
 def get_price(_symbol):
     price = ''
     try:
-        client = Client()
-        client.API_URL = 'https://api.binance.com/api'
         price += f'{_symbol}: $' + str(float(client.get_symbol_ticker(symbol=f'{_symbol}USDT')['price']))
     except Exception as e:
         print(f'Error: {e}')
         price += 'Not found this coin'
 
     return price
+
+def get_token_list():
+    token_list = ''
+    try:
+        exchange_info = client.get_exchange_info()
+        for s in exchange_info['symbols']:
+            if s['quoteAsset'] == 'USDT':
+                token_list += f'{s["baseAsset"]},'       
+    except Exception as e:
+        print(f'Error: {e}')
+
+    return token_list
 
 @app.route('/')
 def home():
@@ -54,8 +66,9 @@ def respond():
        # send the welcoming message
        # bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
        bot.sendMessage(chat_id=chat_id, text=bot_welcome)
-
-
+   elif text == "/coins":
+        token_list = get_token_list()
+        bot.sendMessage(chat_id=chat_id, text=token_list)
    else:
        try:
            symbol = re.sub(r"[^a-zA-Z0-9]","",text).upper()
