@@ -1,7 +1,13 @@
 import re
+import os
 from flask import Flask, request
 import telegram
-from telebot.credentials import bot_token, bot_user_name,URL
+from dotenv import load_dotenv
+
+load_dotenv()
+bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+bot_user_name = "Coin Price"
+URL =  os.getenv('SITE_URL')
 
 global bot
 global TOKEN
