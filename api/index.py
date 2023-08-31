@@ -18,13 +18,13 @@ bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
 
 def get_price(_symbol):
-    print(_symbol)
     price = ''
     try:
         client = Client()
         client.API_URL = 'https://api.binance.com/api'
         price += f'{_symbol}: $' + str(float(client.get_symbol_ticker(symbol=f'{_symbol}USDT')['price']))
     except Exception as e:
+        print(f'Error: {e}')
         price += 'Not found this coin'
 
     return price
