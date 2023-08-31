@@ -38,7 +38,7 @@ def respond():
    # retrieve the message in JSON and then transform it to Telegram object
    update = telegram.Update.de_json(request.get_json(force=True), bot)
 
-   # chat_id = update.message.chat.id
+   chat_id = update.message.chat.id
    # msg_id = update.message.message_id
 
    # Telegram understands UTF-8, so encode text for unicode compatibility
@@ -53,17 +53,17 @@ def respond():
        """
        # send the welcoming message
        # bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-       bot.sendMessage(text=bot_welcome)
+       bot.sendMessage(chat_id=chat_id, text=bot_welcome)
 
 
    else:
        try:
            symbol = re.sub(r"[^a-zA-Z0-9]","",text).upper()
            price = get_price(symbol)
-           bot.sendMessage(text=price)
+           bot.sendMessage(chat_id=chat_id, text=price)
        except Exception:
            # if things went wrong
-           bot.sendMessage(text="Please type corret coin symbal")
+           bot.sendMessage(chat_id=chat_id,text="Please type corret coin symbal")
 
    return 'ok'
 
