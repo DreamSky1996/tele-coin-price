@@ -26,7 +26,6 @@ def get_price(_symbol):
 		price += f'{_symbol}: $' + str(float(client.get_symbol_ticker(symbol=f'{_symbol}USDT')['price']))
 	except Exception as e:
 		price += 'Not found this coin'
-		print(f'Error: {e}')
 
 	return price
 
