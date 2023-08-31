@@ -1,6 +1,7 @@
 import re
 import os
 from flask import Flask, request
+from binance import Client
 import telegram
 from dotenv import load_dotenv
 
@@ -16,6 +17,18 @@ bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
 
+def get_price(_symbol):
+	price = ''
+	try:
+		client = Client()
+		client.API_URL = 'https://api.binance.com/api'
+		price += f'{_symbol}: $' + str(float(client.get_symbol_ticker(symbol=f'{_symbol}USDT')['price']))
+	except Exception as e:
+		price += 'Not found this coin'
+		# print(f'Error: {e}')
+
+	return price
+
 @app.route('/')
 def home():
     return 'Hello, World!'
@@ -25,36 +38,32 @@ def respond():
    # retrieve the message in JSON and then transform it to Telegram object
    update = telegram.Update.de_json(request.get_json(force=True), bot)
 
-   chat_id = update.message.chat.id
-   msg_id = update.message.message_id
+   # chat_id = update.message.chat.id
+   # msg_id = update.message.message_id
 
    # Telegram understands UTF-8, so encode text for unicode compatibility
    text = update.message.text.encode('utf-8').decode()
    # for debugging purposes only
-   print("got text message :", text, chat_id, msg_id)
+   print("got text message :", text)
    # the first time you chat with the bot AKA the welcoming message
    if text == "/start":
        # print the welcoming message
        bot_welcome = """
-       Welcome to coolAvatar bot, the bot is using the service from http://avatars.adorable.io/ to generate cool looking avatars based on the name you enter so please enter a name and the bot will reply with an avatar for your name.
+       Welcome to Coin Price Bot, the bot is using the service from Binance.com to get Coin price
        """
        # send the welcoming message
-    #    bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-       bot.sendMessage(chat_id=chat_id, text=bot_welcome)
+       # bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
+       bot.sendMessage(text=bot_welcome)
 
 
    else:
        try:
-           # clear the message we got from any non alphabets
-           text = re.sub(r"\W", "_", text)
-           # create the api link for the avatar based on http://avatars.adorable.io/
-           url = "https://api.adorable.io/avatars/285/{}.png".format(text.strip())
-           # reply with a photo to the name the user sent,
-           # note that you can send photos by url and telegram will fetch it for you
-           bot.sendPhoto(chat_id=chat_id, photo=url, reply_to_message_id=msg_id)
+           symbol = re.sub(r"[^a-zA-Z0-9]","",text).upper()
+           price = get_price(symbol)
+           bot.sendMessage(text=price)
        except Exception:
            # if things went wrong
-           bot.sendMessage(chat_id=chat_id, text="There was a problem in the name you used, please enter different name", reply_to_message_id=msg_id)
+           bot.sendMessage(text="Please type corret coin symbal")
 
    return 'ok'
 
