@@ -18,6 +18,7 @@ bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
 
 def get_price(_symbol):
+    print(_symbol)
     price = ''
     try:
         client = Client()
