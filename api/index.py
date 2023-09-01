@@ -39,7 +39,7 @@ def generate_keyboard():
             if s['quoteAsset'] == 'USDT':
                 keyboard_item.append(telegram.InlineKeyboardButton(s["baseAsset"], callback_data=s["baseAsset"]))
                 count += 1
-                if count == 10:
+                if count == 5:
                     count = 0
                     keyboard.append(keyboard_item)
                     keyboard_item = []
