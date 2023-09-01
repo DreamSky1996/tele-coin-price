@@ -29,17 +29,24 @@ def get_price(_symbol):
 
     return price
 
-def get_token_list():
-    token_list = ''
+def generate_keyboard():
+    keyboard = []
+    keyboard_item = []
+    count = 0
     try:
         exchange_info = client.get_exchange_info()
         for s in exchange_info['symbols']:
             if s['quoteAsset'] == 'USDT':
-                token_list += f'{s["baseAsset"]},'       
+                keyboard_item.append(telegram.InlineKeyboardButton(s["baseAsset"], callback_data=s["baseAsset"]))
+                count += 1
+                if count == 10:
+                    count = 0
+                    keyboard.append(keyboard_item)
+                    keyboard_item = []
+                
     except Exception as e:
         print(f'Error: {e}')
-
-    return token_list
+    return keyboard
 
 @app.route('/')
 def home():
@@ -67,8 +74,7 @@ def respond():
             # bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
             bot.sendMessage(chat_id=chat_id, text=bot_welcome)
         elif text == "/coins":
-                # token_list = get_token_list()
-                keyboard = [[telegram.InlineKeyboardButton("ETH", callback_data='ETH'), telegram.InlineKeyboardButton("BNB", callback_data='BNB'),telegram.InlineKeyboardButton("BTC", callback_data='BTC')]]
+                keyboard = generate_keyboard()
                 reply_markup = telegram.InlineKeyboardMarkup(keyboard)
                 bot.sendMessage(chat_id=chat_id, text="Coins", reply_markup=reply_markup)
         else:
