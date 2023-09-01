@@ -67,8 +67,10 @@ def respond():
        # bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
        bot.sendMessage(chat_id=chat_id, text=bot_welcome)
    elif text == "/coins":
-        token_list = get_token_list()
-        bot.sendMessage(chat_id=chat_id, text=token_list)
+        # token_list = get_token_list()
+        keyboard = [telegram.InlineKeyboardButton("ETH", callback_data='ETH')]
+        reply_markup = telegram.InlineKeyboardMarkup(keyboard)
+        bot.sendMessage(chat_id=chat_id, text="tokens", reply_markup=reply_markup)
    else:
        try:
            symbol = re.sub(r"[^a-zA-Z0-9]","",text).upper()
