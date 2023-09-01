@@ -68,7 +68,7 @@ def respond():
        bot.sendMessage(chat_id=chat_id, text=bot_welcome)
    elif text == "/coins":
         # token_list = get_token_list()
-        keyboard = [telegram.InlineKeyboardButton("ETH", callback_data='ETH')]
+        keyboard = [[telegram.InlineKeyboardButton("ETH", callback_data='ETH')]]
         reply_markup = telegram.InlineKeyboardMarkup(keyboard)
         bot.sendMessage(chat_id=chat_id, text="tokens", reply_markup=reply_markup)
    else:
