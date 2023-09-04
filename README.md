@@ -10,6 +10,8 @@ https://t.me/Coinprice_telegram_bot
 
 This  is bot  to gets Coin Price using the service from [Binance.com](https://www.binance.com).
 
+![How to work](https://github.com/DreamSky1996/tele-coin-price/blob/main/demo/telegram-bot.gif)
+
 
 
 
