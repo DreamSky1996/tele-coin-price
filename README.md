@@ -13,5 +13,9 @@ This  is bot  to gets Coin Price using the service from [Binance.com](https://ww
 ![How to work](https://github.com/DreamSky1996/tele-coin-price/blob/main/demo/telegram-bot.gif)
 
 
+## Authors
+
+- [Alan Grant](https://alan-grant.vercel.app/
+)
 
 
